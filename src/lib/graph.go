@@ -1,4 +1,4 @@
-package graph
+package lib
 
 import (
 	"container/list"
@@ -23,11 +23,11 @@ type Graph struct {
 	names []string
 }
 
-func addEdge(g *Graph, src, dest int, weight float32) {
+func AddEdge(g *Graph, src, dest int, weight float32) {
 	g.adj[src].PushBack(&Edge{dest, weight})
 }
 
-func newGraph(matrix [][]float32) *Graph {
+func NewGraph(matrix [][]float32) *Graph {
 	g := &Graph{len(matrix), make([]*list.List, len(matrix)), make([]string, len(matrix))}
 
 	for i := 0; i < len(matrix); i++ {
@@ -38,7 +38,7 @@ func newGraph(matrix [][]float32) *Graph {
 	for i := 0; i < len(matrix); i++ {
 		for j := 0; j < len(matrix[i]); j++ {
 			if matrix[i][j] != 0 {
-				addEdge(g, i, j, matrix[i][j])
+				AddEdge(g, i, j, matrix[i][j])
 			}
 		}
 	}
@@ -46,7 +46,7 @@ func newGraph(matrix [][]float32) *Graph {
 	return g
 }
 
-func newGraphNamed(matrix [][]float32, names []string) *Graph {
+func NewGraphNamed(matrix [][]float32, names []string) *Graph {
 	g := &Graph{len(matrix), make([]*list.List, len(matrix)), names}
 
 	for i := 0; i < len(matrix); i++ {
@@ -56,7 +56,7 @@ func newGraphNamed(matrix [][]float32, names []string) *Graph {
 	for i := 0; i < len(matrix); i++ {
 		for j := 0; j < len(matrix[i]); j++ {
 			if matrix[i][j] != 0 {
-				addEdge(g, i, j, matrix[i][j])
+				AddEdge(g, i, j, matrix[i][j])
 			}
 		}
 	}
@@ -64,7 +64,7 @@ func newGraphNamed(matrix [][]float32, names []string) *Graph {
 	return g
 }
 
-func printGraphInfos(g *Graph) {
+func PrintGraphInfos(g *Graph) {
 	fmt.Println("Graph Infos:")
 	fmt.Println("Number of nodes:", g.nodes)
 	fmt.Println("Adjacency List:")
