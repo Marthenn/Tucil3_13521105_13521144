@@ -2,6 +2,7 @@ package graph
 
 import (
 	"container/list"
+	"fmt"
 	"strconv"
 )
 
@@ -62,4 +63,17 @@ func newGraphNamed(matrix [][]float32, names []string) *Graph {
 	}
 
 	return g
+}
+
+func printGraphInfos(g *Graph) {
+	fmt.Println("Graph Infos:")
+	fmt.Println("Number of nodes:", g.nodes)
+	fmt.Println("Adjacency List:")
+	for i := 0; i < g.nodes; i++ {
+		fmt.Print(g.names[i], ": ")
+		for e := g.adj[i].Front(); e != nil; e = e.Next() {
+			fmt.Print(g.names[e.Value.(*Edge).dest], " ")
+		}
+		fmt.Println()
+	}
 }
