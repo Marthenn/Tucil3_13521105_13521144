@@ -25,7 +25,6 @@ type Graph struct {
 
 func addEdge(g *Graph, src, dest int, weight float32) {
 	g.adj[src].PushBack(&Edge{dest, weight})
-	g.adj[dest].PushBack(&Edge{src, weight})
 }
 
 func newGraph(matrix [][]float32) *Graph {
@@ -72,7 +71,7 @@ func printGraphInfos(g *Graph) {
 	for i := 0; i < g.nodes; i++ {
 		fmt.Print(g.names[i], ": ")
 		for e := g.adj[i].Front(); e != nil; e = e.Next() {
-			fmt.Print(g.names[e.Value.(*Edge).dest], " ")
+			fmt.Printf("%s(%f) ", g.names[e.Value.(*Edge).dest], e.Value.(*Edge).weight)
 		}
 		fmt.Println()
 	}
