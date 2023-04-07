@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"container/list"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -16,6 +17,10 @@ func itemInList(item Item, list list.List) bool {
 		}
 	}
 	return false
+}
+
+func euclideanDistance(x1, y1, x2, y2 float32) float32 {
+	return float32(math.Sqrt(float64((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))))
 }
 
 func ReadFiletoGraph(dir string) (*Graph, []float32, []float32) {
