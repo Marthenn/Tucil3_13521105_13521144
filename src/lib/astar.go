@@ -1,38 +1,72 @@
 package lib
 
-func astar(g Graph, euclid []float32, start, end int) (path []int, dist float32) {
-	expanded := make([]float32, len(g.adj))
-	for i := 0; i < len(g.adj); i++ {
-		expanded[i] = euclid[i]
+import (
+	"container/heap"
+	"container/list"
+)
+
+func euclideanCalculator(x, y []float32, end int) []float32 {
+	euclid := make([]float32, len(x))
+	for i := 0; i < len(x); i++ {
+		euclid[i] = euclideanDistance(x[i], y[i], x[end], y[end])
 	}
-	visited := make([]bool, len(g.adj))
-	visited[start] = true
-	previous := make([]int, len(g.adj))
-	previous[start] = -1
-	dist = 0
-	for i := 0; i < len(g.adj); i++ {
-		min := -1
-		for j := 0; j < len(g.adj); j++ {
-			if !visited[j] && (min == -1 || expanded[j] < expanded[min]) {
-				min = j
+	return euclid
+}
+
+func Astar(g Graph, x, y []float32, start, end int) *Item {
+	// init variables
+	euclid := euclideanCalculator(x, y, end)
+	expandedWeight := euclid
+	pq := make(PriorityQueue, 0)
+	heap.Init(&pq)
+	heap.Push(&pq, &Item{start, euclid[start], list.List{}, 0})
+	visited := list.New()
+	// start algorithm
+	for pq.Len() > 0 {
+		currentItem := heap.Pop(&pq).(*Item)
+		currentNodeNumber := currentItem.Value
+		currentNodeCost := currentItem.Priority
+		currentPassed := list.New()
+		currentPassed.PushBackList(&currentItem.PassedNode)
+		currentPassed.PushBack(currentNodeNumber)
+
+		// update expandedWeight
+		for e := g.adj[currentNodeNumber].Front(); e != nil; e = e.Next() {
+			if expandedWeight[e.Value.(*Edge).dest] > currentNodeCost+e.Value.(*Edge).weight+euclid[e.Value.(*Edge).dest] {
+				expandedWeight[e.Value.(*Edge).dest] = currentNodeCost + e.Value.(*Edge).weight + euclid[e.Value.(*Edge).dest]
 			}
 		}
-		if min == -1 {
-			break
-		}
-		visited[min] = true
-		for e := g.adj[min].Front(); e != nil; e = e.Next() {
-			edge := e.Value.(*Edge)
-			if !visited[edge.dest] && (expanded[min]+edge.weight < expanded[edge.dest]) {
-				expanded[edge.dest] = expanded[min] + edge.weight
-				previous[edge.dest] = min
+
+		if currentNodeNumber == end {
+			var dist float32 = 0
+			for e := currentPassed.Front(); e != nil && e.Next() != nil; e = e.Next() {
+				for f := g.adj[e.Value.(int)].Front(); f != nil; f = f.Next() {
+					if f.Value.(*Edge).dest == e.Next().Value.(int) {
+						dist += f.Value.(*Edge).weight
+					}
+				}
+			}
+			return &Item{
+				Value:      currentNodeNumber,
+				Priority:   float32(dist),
+				PassedNode: *currentPassed,
+				Index:      0,
+			}
+		} else {
+			if !itemInList(*currentItem, *visited) {
+				visited.PushBack(currentItem)
+				for e := g.adj[currentNodeNumber].Front(); e != nil; e = e.Next() {
+					tmp := &Item{e.Value.(*Edge).dest, currentNodeCost + e.Value.(*Edge).weight, *currentPassed, len(pq)}
+					heap.Push(&pq, tmp)
+					pq.Update(tmp, tmp.Value, currentNodeCost+e.Value.(*Edge).weight+expandedWeight[tmp.Value])
+				}
 			}
 		}
 	}
-	path = make([]int, 0)
-	for i := end; i != -1; i = previous[i] {
-		path = append(path, i)
+	return &Item{
+		Value:      -1,
+		Priority:   -1,
+		PassedNode: list.List{},
+		Index:      -1,
 	}
-	dist = expanded[end]
-	return
 }

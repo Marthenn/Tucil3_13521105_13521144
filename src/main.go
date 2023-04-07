@@ -29,7 +29,12 @@ func main() {
 		fmt.Println("v", e.Value)
 	}
 	//lib.PrintGraphInfos(g)
-	println(x)
-	println(y)
-	//println()
+	// println(x)
+	// println(y)
+	fmt.Println("A*")
+	res = lib.Astar(*g, x, y, 0, 7)
+	fmt.Println("pr", res.Priority)
+	for e := res.PassedNode.Front(); e != nil; e = e.Next() {
+		fmt.Println("v", e.Value)
+	}
 }
