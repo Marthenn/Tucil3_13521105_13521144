@@ -20,7 +20,11 @@ func main() {
 	//	{0, 2, 8, 0, 2},
 	//	{0, 0, 10, 2, 0},
 	//}
-	g, x, y := lib.ReadFiletoGraph("test.txt")
+	g, x, y, err := lib.ReadFiletoGraph("test.txt")
+	if err != nil {
+		fmt.Println("eror")
+		return
+	}
 	//g := lib.NewGraph(matrix)
 	lib.PrintGraphInfos(g)
 	res := lib.UCS(*g, 0, 7)

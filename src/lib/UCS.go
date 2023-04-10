@@ -10,6 +10,7 @@ func UCS(g Graph, startNode int, goalNode int) *Item {
 	heap.Init(&nodeQueue)
 	heap.Push(&nodeQueue, &Item{startNode, 0, list.List{}, 0})
 	visited := list.New()
+	//fmt.Println("nq", nodeQueue.Len())
 	for nodeQueue.Len() > 0 {
 		currentItem := heap.Pop(&nodeQueue).(*Item)
 		currentNodeNumber := currentItem.Value
