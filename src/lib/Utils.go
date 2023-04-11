@@ -47,7 +47,7 @@ func ReadFiletoGraph(dir string) (*Graph, []float32, []float32, error) {
 	for i := int64(0); i < nodeCount; i++ {
 		scanner.Scan()
 		tmp := strings.Split(scanner.Text(), " ")
-		if 3 != len(tmp) {
+		if len(tmp) != 3 {
 			return nil, nil, nil, errors.New("invalid argument number")
 		}
 		names[i] = tmp[0]
