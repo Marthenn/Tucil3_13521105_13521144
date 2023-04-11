@@ -23,6 +23,10 @@ type Graph struct {
 	names []string
 }
 
+func GetName(g Graph) []string {
+	return g.names
+}
+
 func AddEdge(g *Graph, src, dest int, weight float32) {
 	g.adj[src].PushBack(&Edge{dest, weight})
 }
