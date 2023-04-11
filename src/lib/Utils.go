@@ -44,6 +44,9 @@ func ReadFiletoGraph(dir string) (*Graph, []float32, []float32, error) {
 	names := make([]string, int(nodeCount))
 	xarr := make([]float32, int(nodeCount))
 	yarr := make([]float32, int(nodeCount))
+	if nodeCount < 8 {
+		return nil, nil, nil, errors.New("invalid node count")
+	}
 	for i := int64(0); i < nodeCount; i++ {
 		scanner.Scan()
 		tmp := strings.Split(scanner.Text(), " ")
