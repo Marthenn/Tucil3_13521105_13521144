@@ -74,6 +74,10 @@ func PrintGraphInfos(g *Graph) {
 	fmt.Println("Adjacency List:")
 	for i := 0; i < g.nodes; i++ {
 		fmt.Print(g.names[i], ": ")
+		if g.adj[i].Len() == 0 {
+			fmt.Println("No edge")
+			continue
+		}
 		for e := g.adj[i].Front(); e != nil; e = e.Next() {
 			fmt.Printf("%s(%f) ", g.names[e.Value.(*Edge).dest], e.Value.(*Edge).weight)
 		}
