@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"container/list"
 	"errors"
+	"fmt"
+	"log"
 	"math"
 	"os"
 	"strconv"
@@ -99,4 +101,37 @@ func PathToName(g Graph, i Item) []string {
 		path = append(path, g.names[e.Value.(int)])
 	}
 	return path
+}
+
+func FileNameParse() (Graph, []float32, []float32) {
+	args := os.Args[1:]
+	if len(args) != 1 {
+		log.Fatal("invalid argument number")
+	}
+	g, x, y, err := ReadFiletoGraph(args[0])
+	if err != nil {
+		log.Fatal(err)
+	}
+	return *g, x, y
+}
+
+func RangedInput(min, max int) int {
+	var input int
+	for {
+		fmt.Scanln(&input)
+		if input >= min && input <= max {
+			break
+		}
+		fmt.Println("invalid input")
+	}
+	return input
+}
+
+func PrintPath(g Graph, i Item) {
+	if i.Priority == -1 {
+		fmt.Println("No path found")
+		return
+	}
+	fmt.Println("Path: ", PathToName(g, i))
+	fmt.Println("Cost: ", i.Priority)
 }
