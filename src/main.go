@@ -6,39 +6,25 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello World!")
-	//matrix := [][]float32{
-	//	{0, 1, 2, 3},
-	//	{1, 0, 4, 5},
-	//	{2, 4, 0, 6},
-	//	{3, 5, 6, 0},
-	//}
-	//var matrix = [][]float32{
-	//	{0, 5, 3, 0, 0},
-	//	{5, 0, 0, 2, 0},
-	//	{3, 0, 0, 8, 10},
-	//	{0, 2, 8, 0, 2},
-	//	{0, 0, 10, 2, 0},
-	//}
-	g, x, y, err := lib.ReadFiletoGraph("test.txt")
-	if err != nil {
-		fmt.Println("eror")
-		return
+	g, x, y := lib.FileNameParse()
+	lib.PrintGraphInfos(&g)
+	fmt.Println("Do you want to use a* or ucs?")
+	fmt.Println("1. A*")
+	fmt.Println("2. UCS")
+	algo := lib.RangedInput(1, 2)
+	fmt.Println("Below are the names of the nodes:")
+	for i := 0; i < len(lib.GetName(g)); i++ {
+		fmt.Println(i, lib.GetName(g)[i])
 	}
-	//g := lib.NewGraph(matrix)
-	lib.PrintGraphInfos(g)
-	res := lib.UCS(*g, 0, 7)
-	fmt.Println("pr", res.Priority)
-	for e := res.PassedNode.Front(); e != nil; e = e.Next() {
-		fmt.Println("v", e.Value)
+	fmt.Println("Please enter the start node:")
+	start := lib.RangedInput(0, len(lib.GetName(g))-1)
+	fmt.Println("Please enter the end node:")
+	end := lib.RangedInput(0, len(lib.GetName(g))-1)
+	var res *lib.Item
+	if algo == 1 {
+		res = lib.Astar(g, x, y, start, end)
+	} else {
+		res = lib.UCS(g, start, end)
 	}
-	//lib.PrintGraphInfos(g)
-	// println(x)
-	// println(y)
-	fmt.Println("A*")
-	res = lib.Astar(*g, x, y, 0, 7)
-	fmt.Println("pr", res.Priority)
-	for e := res.PassedNode.Front(); e != nil; e = e.Next() {
-		fmt.Println("v", e.Value)
-	}
+	lib.PrintPath(g, *res)
 }
