@@ -83,3 +83,20 @@ func ReadFiletoGraph(dir string) (*Graph, []float32, []float32, error) {
 	}
 	return NewGraphNamed(matrix, names), xarr, yarr, nil
 }
+
+func NameToIndex(g Graph, name string) int {
+	for i := 0; i < len(g.names); i++ {
+		if g.names[i] == name {
+			return i
+		}
+	}
+	return -1
+}
+
+func PathToName(g Graph, i Item) []string {
+	path := make([]string, 0)
+	for e := i.PassedNode.Front(); e != nil; e = e.Next() {
+		path = append(path, g.names[e.Value.(int)])
+	}
+	return path
+}
