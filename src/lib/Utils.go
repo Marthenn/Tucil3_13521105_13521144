@@ -80,6 +80,9 @@ func ReadFiletoGraph(dir string) (*Graph, []float32, []float32, error) {
 				//log.Fatal(err)
 				return nil, nil, nil, err
 			}
+			if parseF < 0 {
+				return nil, nil, nil, errors.New("negative weight")
+			}
 			matrix[j][i] = float32(parseF)
 		}
 	}
