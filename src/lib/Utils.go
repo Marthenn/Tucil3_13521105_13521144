@@ -122,9 +122,15 @@ func FileNameParse() (Graph, []float32, []float32) {
 }
 
 func RangedInput(min, max int) int {
+	var read string
 	var input int
 	for {
-		fmt.Scanln(&input)
+		_, err := fmt.Scan(&read)
+		input, err = strconv.Atoi(read)
+		if err != nil {
+			fmt.Println("invalid input")
+			continue
+		}
 		if input >= min && input <= max {
 			break
 		}
